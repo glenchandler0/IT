@@ -1,0 +1,64 @@
+Private Sub CommandButton1_Click()
+
+    'Declaration of variables
+    Dim newSheetCounter As Integer
+    Dim str As String
+    Dim str2 As String
+    Dim compare As Boolean
+    Dim strArray() As String
+    Dim size As Integer
+    
+    'Retrieves and parses property names from first sheet
+    newSheetCounter = 1
+    For i = 1 To Worksheets("Sheet4").UsedRange.Rows.Count
+        str = Worksheets("Sheet4").Cells(i, 3).Value
+        strArray = Split(str, " ")
+        
+        size = UBound(strArray) - LBound(strArray) + 1
+        
+        If (size > 1) Then
+            If (StrComp(strArray(0), "Property") <> 0) Then
+                Worksheets("Sheet5").Cells(newSheetCounter, 1).Value = strArray(0) & " " & strArray(1)
+                newSheetCounter = newSheetCounter + 1
+            End If
+        End If
+        
+    Next i
+    
+    'Retrieves and parses property names from second sheet
+    newSheetCounter = 1
+    For i = 1 To Worksheets("Sheet1").UsedRange.Rows.Count
+        str = Worksheets("Sheet1").Cells(i, 4).Value
+        strArray = Split(str, " ")
+        
+        size = UBound(strArray) - LBound(strArray) + 1
+        
+        If (size > 1) Then
+            If (StrComp(strArray(0), "Property") <> 0) Then
+                Worksheets("Sheet5").Cells(newSheetCounter, 2).Value = strArray(0) & " " & strArray(1)
+                newSheetCounter = newSheetCounter + 1
+            End If
+        End If
+    Next i
+    
+    'Compares parsed lists
+    Dim comparedCount As Integer
+    comparedCount = 1
+    For i = 1 To Worksheets("Sheet5").UsedRange.Rows.Count
+        str = Worksheets("Sheet5").Cells(i, 1).Value
+        
+        compare = False
+        For j = 1 To Worksheets("Sheet5").UsedRange.Rows.Count
+            str2 = Worksheets("Sheet5").Cells(j, 2).Value
+            If (StrComp(str, str2) = 0) Then
+                compare = True
+            End If
+        Next j
+        
+        If (compare = False) Then
+            Worksheets("Sheet5").Cells(comparedCount, 3).Value = str
+            comparedCount = comparedCount + 1
+        End If
+    Next i
+
+End Sub
